@@ -19,7 +19,7 @@ export default function OmSubmitButton({children, otherProps}: OmSubmitButtonPro
         color: 'primary',
         variant: 'contained',
         fullWidth: true,
-        onclick: handleSubmit
+        onClick: handleSubmit
     }
 
     return (

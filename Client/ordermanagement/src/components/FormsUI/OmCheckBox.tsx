@@ -21,7 +21,7 @@ export default function OmCheckBox({name, label, legend, otherProps}: OmCheckBox
     const configCheckBox = {
         ...otherProps,
         ...field,
-        onchange: handleChange,
+        onChange: handleChange,
         checked: meta.value
     }
 
