@@ -63,7 +63,7 @@ export default function CustomerPage() {
     // }
 
     const customer = customerData.customers[0] as Customer
-    // const customerOrders = customer.orders as Order[];
+    const customerOrders = customer.orders as Order[];
     return (
         <Container>
             {/* <Dialog
@@ -103,10 +103,10 @@ export default function CustomerPage() {
                 <Grid item xs={12}>
                     <OmHeader header='Customer Orders' />
                 </Grid>
-                {/* <Grid item xs={12}>
+                <Grid item xs={12}>
                     <OrderList orders={customerOrders} />
                 </Grid>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                     <Button variant='contained' fullWidth={true} href={`/customers/${customer.id}/neworder`}>
                         Add New Order
                     </Button>
