@@ -12,6 +12,7 @@ import OmSubmitButton from '../../../components/FormsUI/OmSubmitButton';
 import OmDatePicker from '../../../components/FormsUI/OmDatePicker';
 import OmCheckBox from '../../../components/FormsUI/OmCheckBox';
 import OmLoading from '../../../components/elements/OmLoading';
+import statuses from '../../../data/statuses.json';
 
 interface OrderFormProps {
     order: Order
@@ -103,13 +104,13 @@ export default function OrderForm({order}: OrderFormProps) {
                 >
                     <Form>
                         <Grid container spacing={2}>
-                            {/* <Grid item xs={12}>
+                            <Grid item xs={12}>
                                 <OmSelect
                                     name='status'
                                     otherProps={{label: "Order Status"}}
                                     options={statuses}
                                 />
-                            </Grid> */}
+                            </Grid>
                             <Grid item xs={12}>
                                 <OmDatePicker
                                     name='orderDate'
