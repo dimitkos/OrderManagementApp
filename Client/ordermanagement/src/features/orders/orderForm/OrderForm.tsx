@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Order, Status, } from '../../../graphql/generated/schema';
+import { Order, Status, OrderModelInput, useAddOrUpdateOrderMutation } from '../../../graphql/generated/schema';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { formatDatePicker } from '../../../util/DateFormater';
@@ -48,54 +48,50 @@ export default function OrderForm({order}: OrderFormProps) {
         status: order.status || Status.Draft
     };
 
-    async function addOrUpdateOrderDetails(values: any) {
-        console.log(values);
+    const [addOrUpdateOrder, {loading: addOrUpdateOrderLoading, error: addOrUpdateOrderError}] = useAddOrUpdateOrderMutation();
+    const handleClose = (event: any) => {
+        if(event.reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+     }
+
+    async function addOrUpdateOrderDetails(values: OrderModelInput) {
+        const response = await addOrUpdateOrder({
+             variables: {
+                order: values
+             }
+         });
+
+         setOpen(true);
+
+         const order = response.data?.addOrUpdateOrder as Order;
+         if(order.id)
+         {
+            navigate(`/orders/${order.id}`);
+         }
     }
 
-    // const [addOrUpdateOrder, {loading: addOrUpdateOrderLoading, error: addOrUpdateOrderError}] = useAddOrUpdateOrderMutation();
-    // const handleClose = (event: any) => {
-    //     if(event.reason === 'clickaway') {
-    //         return;
-    //     }
+    if(addOrUpdateOrderLoading) {
+        return <OmLoading />;
+    }
 
-    //     setOpen(false);
-    // }
-
-    // async function addOrUpdateOrderDetails(values: OrderModelInput) {
-    //     const response = await addOrUpdateOrder({
-    //         variables: {
-    //             order: values
-    //         }
-    //     });
-
-    //     setOpen(true);
-
-    //     const order = response.data?.addOrUpdateOrder as Order;
-    //     if(order.id)
-    //     {
-    //         navigate(`/orders/${order.id}`);
-    //     }
-    // }
-
-    // if(addOrUpdateOrderLoading) {
-    //     return <OmLoading />;
-    // }
-
-    // if(addOrUpdateOrderError) {
-    //     return (
-    //         <Snackbar open={true} autoHideDuration={6000}>
-    //             <Alert severity="error">Error retreiving order data</Alert>
-    //         </Snackbar>
-    //     );
-    // }
+    if(addOrUpdateOrderError) {
+        return (
+            <Snackbar open={true} autoHideDuration={6000}>
+                <Alert severity="error">Error retreiving order data</Alert>
+             </Snackbar>
+        );
+    }
 
     return (
         <Container>
-            {/* <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            {<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{width: '100%'}}>
                     {!order.id ? "Order details successfully added" : "Order details successfully updated"}
                 </Alert>
-            </Snackbar> */}
+            </Snackbar>}
             <div>
                 <Formik
                     initialValues={INITIAL_FORM_STATE}

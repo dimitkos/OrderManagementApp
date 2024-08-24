@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Customer } from '../../../graphql/generated/schema';
+import { Customer, CustomerModelInput, useAddOrUpdateCustomerMutation } from '../../../graphql/generated/schema';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { Container } from '@mui/system';
@@ -53,51 +53,50 @@ export default function CustomerForm({customer}: CustomerFormProps) {
         country: customer.address?.country || ''
     };
 
-    // const [addOrUpdateCustomer, {loading: addOrUpdateCustomerLoading, error: addOrUpdateCustomerError}] = useAddOrUpdateCustomerMutation();
-    // const handleClose = (event: any) => {
-    //     if(event.reason === 'clickaway') {
-    //         return;
-    //     }
+    const [addOrUpdateCustomer, {loading: addOrUpdateCustomerLoading, error: addOrUpdateCustomerError}] = useAddOrUpdateCustomerMutation();
+    const handleClose = (event: any) => {
+        if(event.reason === 'clickaway') {
+            return;
+        }
 
-    //     setOpen(false);
-    // }
+         setOpen(false);
+     }
 
-    async function addOrUpdateCustomerDetails(values: any) {
-        console.log(values);
-    //    const response = await addOrUpdateCustomer({
-    //     variables: {
-    //         customer: values
-    //     }
-    //    });
-
-    //    setOpen(true);
-
-    //    const customer = response.data?.addOrUpdateCustomer as Customer;
-    //    if(customer.id)
-    //    {
-    //     navigate(`/customers/${customer.id}`);
-    //    }
-    }
-
-    // if(addOrUpdateCustomerLoading) {
-    //     return <OmLoading />;
-    // }
-
-    // if(addOrUpdateCustomerError) {
-    //     return (
-    //         <Snackbar open={true} autoHideDuration={6000}>
-    //             <Alert severity="error">Error retreiving customer data</Alert>
-    //         </Snackbar>
-    //     );
-    // }
+     async function addOrUpdateCustomerDetails(values: CustomerModelInput) {
+        const response = await addOrUpdateCustomer({
+         variables: {
+             customer: values
+         }
+        });
+ 
+        setOpen(true);
+ 
+        const customer = response.data?.addOrUpdateCustomer as Customer;
+        if(customer.id)
+        {
+         navigate(`/customers/${customer.id}`);
+        }
+     }
+ 
+     if(addOrUpdateCustomerLoading) {
+         return <OmLoading />;
+     }
+ 
+     if(addOrUpdateCustomerError) {
+         return (
+             <Snackbar open={true} autoHideDuration={6000}>
+                 <Alert severity="error">Error retreiving customer data</Alert>
+             </Snackbar>
+         );
+     }
 
     return (
         <Container>
-            {/* <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            {<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{width: '100%'}}>
                     {!customer.id ? "Customer details successfully added" : "Customer details successfully updated"}
                 </Alert>
-            </Snackbar> */}
+            </Snackbar>}
             <div>
                 <Formik
                     initialValues={INITIAL_FORM_STATE}
