@@ -106,11 +106,11 @@ export default function CustomerPage() {
                 <Grid item xs={12}>
                     <OrderList orders={customerOrders} />
                 </Grid>
-                {/* <Grid item xs={12}>
+                <Grid item xs={12}>
                     <Button variant='contained' fullWidth={true} href={`/customers/${customer.id}/neworder`}>
                         Add New Order
                     </Button>
-                </Grid> */}
+                </Grid>
             </Grid>
         </Container>
     );
