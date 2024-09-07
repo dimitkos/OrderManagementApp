@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import OmAlert from '../../components/elements/OmAlert';
 import OmHeader from '../../components/elements/OmHeader';
 import OmLoading from '../../components/elements/OmLoading';
-import { Customer, Order, useGetCustomerByIdQuery } from '../../graphql/generated/schema';
+import { Customer, Order, useGetCustomerByIdQuery, useDeleteCustomerMutation  } from '../../graphql/generated/schema';
 import OrderList from '../orders/ordersDashboard/OrderList';
 import CustomerForm from './customerForms/CustomerForm';
 
@@ -22,33 +22,29 @@ export default function CustomerPage() {
         }
     });
 
-    // const [deleteCustomer, {loading: deleteCustomerLoading, error: deleteCustomerError}] = useDeleteCustomerMutation();
+    const [deleteCustomer, {loading: deleteCustomerLoading, error: deleteCustomerError}] = useDeleteCustomerMutation();
 
-    // async function deleteCustomerDetails() {
-    //     const response = await deleteCustomer({
-    //         variables: {
-    //             id: customerId
-    //         }
-    //     });
+    async function deleteCustomerDetails() {
+        const response = await deleteCustomer({
+            variables: {
+                id: customerId
+            }
+        });
 
-    //     if(!response.errors) {
-    //         navigate('/customers');
-    //     }
-    // }
+        if(!response.errors) {
+            navigate('/customers');
+        }
+    }
 
-    // function handleClickOpen() {
-    //     setOpen(true);
-    // }
+    function handleClickOpen() {
+        setOpen(true);
+    }
 
-    // function handleClose() {
-    //     setOpen(false);
-    // }
+    function handleClose() {
+        setOpen(false);
+    }
 
-    // if(customerLoading || deleteCustomerLoading) {
-    //     return <OmLoading/>
-    // }
-
-    if(customerLoading) {
+    if(customerLoading || deleteCustomerLoading) {
         return <OmLoading/>
     }
 
@@ -57,16 +53,16 @@ export default function CustomerPage() {
         return <OmAlert message='Error retreiving customer data' />
     }
 
-    // if(deleteCustomerError)
-    // {
-    //     return <OmAlert message='Error deleting customer data' />
-    // }
+    if(deleteCustomerError)
+    {
+        return <OmAlert message='Error deleting customer data' />
+    }
 
     const customer = customerData.customers[0] as Customer
     const customerOrders = customer.orders as Order[];
     return (
         <Container>
-            {/* <Dialog
+            <Dialog
                 open={open}
                 onClose={handleClose}
                 aria-labelledby='alert-dialog-title'
@@ -84,19 +80,19 @@ export default function CustomerPage() {
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={deleteCustomerDetails} color='error' autoFocus>Delete</Button>
                 </DialogActions>
-            </Dialog> */}
+            </Dialog>
             <Grid container spacing={2}>
                 <Grid item xs={2}></Grid>
                 <Grid item xs={8}>
                     <OmHeader header='Customer Details' />
                 </Grid>
-                {/* <Grid item xs={2}>
+                <Grid item xs={2}>
                     <Button variant='outlined' color='error' startIcon={<Delete />}
                         onClick={handleClickOpen}
                     >
                         Delete
                     </Button>
-                </Grid> */}
+                </Grid>
                 <Grid item xs={12}>
                     <CustomerForm customer={customer} />
                 </Grid>

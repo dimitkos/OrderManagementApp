@@ -76,6 +76,23 @@ namespace Infrastructure.Services
             order.OtherNotes = orderModel.OtherNotes;
         }
 
+        public async Task<bool> DeleteOrderAsync(int orderId)
+        {
+            var context = _contextFactory.CreateDbContext();
+
+            var order = await context.Orders
+                            .Where(o => o.Id == orderId)
+                            .FirstOrDefaultAsync();
+
+            if (order is null)
+                throw new Exception($"Order with id {orderId} was not found");
+
+            order.IsDeleted = true;
+
+            context.Orders.Update(order);
+            return await context.SaveChangesAsync() > 0;
+        }
+
         private async Task<Order> CreateOrder(OrderModel orderModel, OrderManagementContext context)
         {
             Order order = new Order
