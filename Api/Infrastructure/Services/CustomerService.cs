@@ -21,7 +21,7 @@ namespace Infrastructure.Services
 
             return context.Customers
                 .Where(c=> !c.IsDeleted)
-                .Include(x=> x.Orders)
+                .Include(x=> x.Orders.Where(o => !o.IsDeleted))
                 .Include(x=> x.Address);
         }
 
