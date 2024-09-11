@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Core.Models;
 
 namespace Api.GraphQL
 {
@@ -17,6 +18,11 @@ namespace Api.GraphQL
         public IQueryable<Order> GetOrders([Service] IOrderService orderService)
         {
             return orderService.GetOrders();
+        }
+
+        public async Task<Stats> GetStats([Service] ICustomerService customerService)
+        {
+            return await customerService.GetCustomersAndOrdersStats();
         }
     }
 }
